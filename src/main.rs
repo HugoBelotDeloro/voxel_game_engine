@@ -1,6 +1,7 @@
 //! Create a custom material to draw basic lines in 3D
 
 use bevy::{
+    input::mouse::MouseMotion,
     pbr::{MaterialPipeline, MaterialPipelineKey},
     prelude::*,
     reflect::{TypePath, TypeUuid},
@@ -17,6 +18,7 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, MaterialPlugin::<LineMaterial>::default()))
         .add_systems(Startup, setup)
+        .add_systems(Update, mouse_move_camera)
         .run();
 }
 
@@ -97,4 +99,23 @@ impl From<LineList> for Mesh {
         mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vertices);
         mesh
     }
+}
+
+fn mouse_move_camera(
+    mut ev_motion: EventReader<MouseMotion>,
+    mut query: Query<&mut Transform, With<Camera>>,
+    timer: Res<Time>,
+) {
+    let mut rotation_move = Vec2::ZERO;
+    for ev in ev_motion.iter() {
+        rotation_move += ev.delta;
+    }
+    rotation_move *= timer.delta_seconds() * 0.1;
+
+    for mut transform in query.iter_mut() {
+        transform.rotation = transform.rotation * Quat::from_rotation_x(rotation_move.y);
+        transform.rotation = Quat::from_rotation_y(rotation_move.x) * transform.rotation;
+    }
+
+    ev_motion.clear();
 }
