@@ -29,34 +29,30 @@ fn setup(
     commands.spawn(MaterialMeshBundle {
         mesh: meshes.add(Mesh::from(LineList {
             lines: vec![
-                (Vec3::ZERO, Vec3::new(1.0, 1.0, 0.0)),
+                (Vec3::ZERO, Vec3::new(1.0, 0.0, 0.0)),
+                (Vec3::ZERO, Vec3::new(0.0, 1.0, 0.0)),
+                (Vec3::ZERO, Vec3::new(0.0, 0.0, 1.0)),
+                (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 1.0, 1.0)),
                 (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 0.0, 0.0)),
+                (Vec3::new(1.0, 1.0, 0.0), Vec3::new(0.0, 1.0, 0.0)),
+                (Vec3::new(0.0, 1.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
+                (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
+                (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 1.0, 0.0)),
+                (Vec3::new(1.0, 0.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
+                (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
+                (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 0.0, 0.0)),
             ],
         })),
-        transform: Transform::from_xyz(-1.5, 0.0, 0.0),
+        transform: Transform::from_xyz(0.0, 0.0, 0.0),
         material: materials.add(LineMaterial {
             color: Color::GREEN,
         }),
         ..default()
     });
 
-    // Spawn a line strip that goes from point to point
-    commands.spawn(MaterialMeshBundle {
-        mesh: meshes.add(Mesh::from(LineStrip {
-            points: vec![
-                Vec3::ZERO,
-                Vec3::new(1.0, 1.0, 0.0),
-                Vec3::new(1.0, 0.0, 0.0),
-            ],
-        })),
-        transform: Transform::from_xyz(0.5, 0.0, 0.0),
-        material: materials.add(LineMaterial { color: Color::BLUE }),
-        ..default()
-    });
-
     // camera
     commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(-2.0, 2.5, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
+        transform: Transform::from_xyz(0.5, 0.5, 5.0).looking_at(Vec3::new(0.5, 0.5, 0.0), Vec3::Y),
         ..default()
     });
 }
@@ -99,23 +95,6 @@ impl From<LineList> for Mesh {
 
         let vertices: Vec<_> = line.lines.into_iter().flat_map(|(a, b)| [a, b]).collect();
         mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, vertices);
-        mesh
-    }
-}
-
-/// A list of points that will have a line drawn between each consecutive points
-#[derive(Debug, Clone)]
-pub struct LineStrip {
-    pub points: Vec<Vec3>,
-}
-
-impl From<LineStrip> for Mesh {
-    fn from(line: LineStrip) -> Self {
-        // This tells wgpu that the positions are a list of points
-        // where a line will be drawn between each consecutive point
-        let mut mesh = Mesh::new(PrimitiveTopology::LineStrip);
-
-        mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, line.points);
         mesh
     }
 }
