@@ -18,7 +18,7 @@ fn main() {
     App::new()
         .add_plugins((DefaultPlugins, MaterialPlugin::<LineMaterial>::default()))
         .add_systems(Startup, setup)
-        .add_systems(Update, mouse_move_camera)
+        .add_systems(Update, (mouse_move_camera, kb_move_camera))
         .run();
 }
 
@@ -118,4 +118,30 @@ fn mouse_move_camera(
     }
 
     ev_motion.clear();
+}
+
+fn kb_move_camera(
+    keys: Res<Input<ScanCode>>,
+    mut query: Query<&mut Transform, With<Camera>>,
+    timer: Res<Time>,
+) {
+    // 17 30 31 32 57 42
+    let mut translation = Vec3::ZERO;
+    if keys.pressed(ScanCode(17)) {
+        translation += Vec3::new(0., 0., -1.);
+    }
+    if keys.pressed(ScanCode(30)) {
+        translation += Vec3::new(-1., 0., 0.);
+    }
+    if keys.pressed(ScanCode(31)) {
+        translation += Vec3::new(0., 0., 1.);
+    }
+    if keys.pressed(ScanCode(32)) {
+        translation += Vec3::new(1., 0., 0.);
+    }
+    translation = translation.normalize_or_zero() * timer.delta_seconds();
+
+    for mut transform in query.iter_mut() {
+        transform.translation += translation;
+    }
 }
