@@ -1,10 +1,9 @@
-//! Create a custom material to draw basic lines in 3D
-
 use bevy::prelude::*;
 
 mod material;
-mod player_controller;
 mod player;
+mod player_controller;
+mod settings;
 mod test_scene;
 
 use material::LineMaterial;
@@ -16,6 +15,7 @@ fn main() {
             MaterialPlugin::<LineMaterial>::default(),
             test_scene::TestScenePlugin,
             player::PlayerPlugin,
+            settings::SettingsPlugin,
         ))
         .add_systems(Startup, setup)
         .run();
@@ -40,4 +40,3 @@ fn setup(mut commands: Commands) {
         }),
     );
 }
-
