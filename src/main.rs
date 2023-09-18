@@ -1,103 +1,45 @@
 //! Create a custom material to draw basic lines in 3D
 
-use std::f32::consts::{PI, TAU};
-
 use bevy::prelude::*;
 
 mod material;
 mod player_controller;
+mod test_scene;
 use player_controller::{player_controller, PlayerController};
 
-use material::{LineList, LineMaterial};
+use material::LineMaterial;
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, MaterialPlugin::<LineMaterial>::default()))
+        .add_plugins((
+            DefaultPlugins,
+            MaterialPlugin::<LineMaterial>::default(),
+            test_scene::TestScenePlugin,
+        ))
         .add_systems(Startup, setup)
         .add_systems(Update, (player_controller, move_camera))
         .run();
 }
 
-fn spawn_cube(
-    commands: &mut Commands,
-    meshes: &mut ResMut<Assets<Mesh>>,
-    materials: &mut ResMut<Assets<LineMaterial>>,
-    color: Color,
-    transform: Transform,
-) {
-    // Spawn a list of lines with start and end points for each lines
-    commands.spawn((
-        MaterialMeshBundle {
-            mesh: meshes.add(Mesh::from(LineList {
-                lines: vec![
-                    (Vec3::ZERO, Vec3::new(1.0, 0.0, 0.0)),
-                    (Vec3::ZERO, Vec3::new(0.0, 1.0, 0.0)),
-                    (Vec3::ZERO, Vec3::new(0.0, 0.0, 1.0)),
-                    (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 1.0, 1.0)),
-                    (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 0.0, 0.0)),
-                    (Vec3::new(1.0, 1.0, 0.0), Vec3::new(0.0, 1.0, 0.0)),
-                    (Vec3::new(0.0, 1.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
-                    (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
-                    (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 1.0, 0.0)),
-                    (Vec3::new(1.0, 0.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
-                    (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
-                    (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 0.0, 0.0)),
-                ],
-            })),
-            transform,
-            material: materials.add(LineMaterial { color }),
-            ..default()
-        },
-        //PlayerController::default(),
-    ));
-}
-
 fn setup(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<LineMaterial>>,
 ) {
-    spawn_cube(
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-        Color::GREEN,
-        Transform::from_xyz(3., 0., 0.),
-    );
-    spawn_cube(
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-        Color::RED,
-        Transform::from_xyz(0., 3., 0.),
-    );
-    spawn_cube(
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-        Color::BLUE,
-        Transform::from_xyz(0., 0., 3.),
-    );
-    spawn_cube(
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-        Color::CYAN,
-        Transform::from_xyz(-3., 0., 0.),
-    );
-    spawn_cube(
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-        Color::PINK,
-        Transform::from_xyz(0., -3., 0.),
-    );
-    spawn_cube(
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-        Color::YELLOW,
-        Transform::from_xyz(0., 0., -3.),
+    commands.spawn(
+        TextBundle::from_section(
+            "Press 'D' to toggle drawing gizmos on top of everything else in the scene\n\
+                Press 'P' to toggle perspective for line gizmos\n\
+                Hold 'Left' or 'Right' to change the line width",
+            TextStyle {
+                font_size: 20.,
+                ..default()
+            },
+        )
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            top: Val::Px(12.0),
+            left: Val::Px(12.0),
+            ..default()
+        }),
     );
 
     // camera
