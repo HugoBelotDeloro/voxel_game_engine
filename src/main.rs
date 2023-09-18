@@ -26,29 +26,30 @@ fn spawn_cube(
     transform: Transform,
 ) {
     // Spawn a list of lines with start and end points for each lines
-    commands.spawn(MaterialMeshBundle {
-        mesh: meshes.add(Mesh::from(LineList {
-            lines: vec![
-                (Vec3::ZERO, Vec3::new(1.0, 0.0, 0.0)),
-                (Vec3::ZERO, Vec3::new(0.0, 1.0, 0.0)),
-                (Vec3::ZERO, Vec3::new(0.0, 0.0, 1.0)),
-                (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 1.0, 1.0)),
-                (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 0.0, 0.0)),
-                (Vec3::new(1.0, 1.0, 0.0), Vec3::new(0.0, 1.0, 0.0)),
-                (Vec3::new(0.0, 1.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
-                (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
-                (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 1.0, 0.0)),
-                (Vec3::new(1.0, 0.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
-                (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
-                (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 0.0, 0.0)),
-            ],
-        })),
-        transform,
-        material: materials.add(LineMaterial {
-            color,
-        }),
-        ..default()
-    });
+    commands.spawn((
+        MaterialMeshBundle {
+            mesh: meshes.add(Mesh::from(LineList {
+                lines: vec![
+                    (Vec3::ZERO, Vec3::new(1.0, 0.0, 0.0)),
+                    (Vec3::ZERO, Vec3::new(0.0, 1.0, 0.0)),
+                    (Vec3::ZERO, Vec3::new(0.0, 0.0, 1.0)),
+                    (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 1.0, 1.0)),
+                    (Vec3::new(1.0, 1.0, 0.0), Vec3::new(1.0, 0.0, 0.0)),
+                    (Vec3::new(1.0, 1.0, 0.0), Vec3::new(0.0, 1.0, 0.0)),
+                    (Vec3::new(0.0, 1.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
+                    (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
+                    (Vec3::new(0.0, 1.0, 1.0), Vec3::new(0.0, 1.0, 0.0)),
+                    (Vec3::new(1.0, 0.0, 1.0), Vec3::new(0.0, 0.0, 1.0)),
+                    (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 1.0, 1.0)),
+                    (Vec3::new(1.0, 0.0, 1.0), Vec3::new(1.0, 0.0, 0.0)),
+                ],
+            })),
+            transform,
+            material: materials.add(LineMaterial { color }),
+            ..default()
+        },
+        //PlayerController::default(),
+    ));
 }
 
 fn setup(
@@ -56,12 +57,48 @@ fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<LineMaterial>>,
 ) {
-    spawn_cube(&mut commands, &mut meshes, &mut materials, Color::GREEN, Transform::from_xyz(3., 0., 0.));
-    spawn_cube(&mut commands, &mut meshes, &mut materials, Color::RED, Transform::from_xyz(0., 3., 0.));
-    spawn_cube(&mut commands, &mut meshes, &mut materials, Color::BLUE, Transform::from_xyz(0., 0., 3.));
-    spawn_cube(&mut commands, &mut meshes, &mut materials, Color::CYAN, Transform::from_xyz(-3., 0., 0.));
-    spawn_cube(&mut commands, &mut meshes, &mut materials, Color::PINK, Transform::from_xyz(0., -3., 0.));
-    spawn_cube(&mut commands, &mut meshes, &mut materials, Color::YELLOW, Transform::from_xyz(0., 0., -3.));
+    spawn_cube(
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+        Color::GREEN,
+        Transform::from_xyz(3., 0., 0.),
+    );
+    spawn_cube(
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+        Color::RED,
+        Transform::from_xyz(0., 3., 0.),
+    );
+    spawn_cube(
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+        Color::BLUE,
+        Transform::from_xyz(0., 0., 3.),
+    );
+    spawn_cube(
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+        Color::CYAN,
+        Transform::from_xyz(-3., 0., 0.),
+    );
+    spawn_cube(
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+        Color::PINK,
+        Transform::from_xyz(0., -3., 0.),
+    );
+    spawn_cube(
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+        Color::YELLOW,
+        Transform::from_xyz(0., 0., -3.),
+    );
 
     // camera
     commands.spawn((
@@ -76,22 +113,15 @@ fn setup(
 
 fn move_camera(mut query: Query<(&mut Transform, &PlayerController)>, timer: Res<Time>) {
     for (mut transform, player_controller) in query.iter_mut() {
-        transform.translation += Vec3::new(
-            player_controller.horizontal_movement.x,
-            player_controller.vertical_movement,
-            player_controller.horizontal_movement.y,
-        ) * timer.delta_seconds();
+        let direction = transform.back() * player_controller.horizontal_movement.y
+            + transform.right() * player_controller.horizontal_movement.x
+            + transform.up() * player_controller.vertical_movement;
+        transform.translation += direction * timer.delta_seconds();
 
         let mouse_delta = player_controller.mouse_delta * timer.delta_seconds() * 0.2;
 
-        let (mut pitch, mut yaw, _) = transform.rotation.to_euler(EulerRot::XYZ);
-
-        pitch = (pitch + mouse_delta.y).clamp(-PI, PI);
-        yaw += mouse_delta.x;
-        if yaw.abs() > PI {
-            yaw = yaw.rem_euclid(TAU);
-        }
-
-        transform.rotation = Quat::from_euler(EulerRot::XYZ, pitch, yaw, 0.);
+        //transform.rotation = Quat::from_euler(EulerRot::XYZ, pitch, yaw, PI);
+        //transform.rotate_x(mouse_delta.y);
+        transform.rotate_y(mouse_delta.x);
     }
 }
