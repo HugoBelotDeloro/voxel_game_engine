@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::material::{LineList, LineMaterial};
+use bevy::prelude::*;
 
 pub struct TestScenePlugin;
 

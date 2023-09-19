@@ -1,4 +1,7 @@
-use crate::{player_controller::{player_controller, PlayerController}, settings::Settings};
+use crate::{
+    player_controller::{player_controller, PlayerController},
+    settings::Settings,
+};
 use bevy::prelude::*;
 
 pub struct PlayerPlugin;
@@ -47,19 +50,27 @@ fn move_body(
     for player_controller in controller_query.iter() {
         for mut transform in body_query.iter_mut() {
             let direction = (transform.back() * player_controller.horizontal_movement.y
-                + transform.right() * player_controller.horizontal_movement.x) * settings.horizontal_speed
+                + transform.right() * player_controller.horizontal_movement.x)
+                * settings.horizontal_speed
                 + transform.up() * player_controller.vertical_movement * settings.vertical_speed;
             transform.translation += direction * timer.delta_seconds();
 
-            let mouse_delta = player_controller.mouse_delta * timer.delta_seconds() * settings.sensitivity;
+            let mouse_delta =
+                player_controller.mouse_delta * timer.delta_seconds() * settings.sensitivity;
 
             transform.rotate_y(mouse_delta.x);
         }
     }
 }
 
-fn move_head(mut head_query: Query<(&mut Transform, &PlayerController)>, timer: Res<Time>, settings: Res<Settings>) {
+fn move_head(
+    mut head_query: Query<(&mut Transform, &PlayerController)>,
+    timer: Res<Time>,
+    settings: Res<Settings>,
+) {
     for (mut transform, player_controller) in head_query.iter_mut() {
-        transform.rotate_x(player_controller.mouse_delta.y * timer.delta_seconds() * settings.sensitivity);
+        transform.rotate_x(
+            player_controller.mouse_delta.y * timer.delta_seconds() * settings.sensitivity,
+        );
     }
 }
