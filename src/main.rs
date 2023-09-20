@@ -12,7 +12,7 @@ use material::LineMaterial;
 fn main() {
     App::new()
         .add_plugins((
-            DefaultPlugins,
+            DefaultPlugins.set(ImagePlugin::default_nearest()),
             MaterialPlugin::<LineMaterial>::default(),
             test_scene::TestScenePlugin,
             player::PlayerPlugin,
