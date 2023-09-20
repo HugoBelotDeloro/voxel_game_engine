@@ -106,13 +106,10 @@ fn setup(
         ..default()
     });
 
-    commands.spawn(PointLightBundle {
-        point_light: PointLight {
-            intensity: 1500.,
-            shadows_enabled: true,
-            ..default()
-        },
-        transform: Transform::from_xyz(4., 8., 4.),
+    commands.insert_resource(AmbientLight {
+        brightness: 1.,
         ..default()
     });
+
+    // commands.insert_resource(Msaa::Off);
 }
