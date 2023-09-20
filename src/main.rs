@@ -19,8 +19,5 @@ fn main() {
             settings::SettingsPlugin,
             debug_text::DebugTextPlugin,
         ))
-        .add_systems(Startup, setup)
         .run();
 }
-
-fn setup(mut _commands: Commands) {}
