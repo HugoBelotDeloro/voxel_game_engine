@@ -23,8 +23,11 @@
         craneLib = crane.lib.${system}.overrideToolchain
           fenix.packages.${system}.stable.toolchain;
 
+        src = craneLib.path ./.;
+        cleanedSrc = craneLib.cleanCargoSource src;
+
         commonArgs = {
-          src = craneLib.cleanCargoSource (craneLib.path ./.);
+          src = cleanedSrc;
 
           buildInputs = with pkgs; [
             udev
@@ -53,15 +56,15 @@
           craneLib.cargoFmt (commonArgs // { inherit cargoArtifacts; });
 
       in {
-        # checks = {
-        #   inherit bevyGame bevyGameClippy bevyGameFmt;
-        # };
+        checks = {
+          inherit bevyGame bevyGameClippy bevyGameFmt;
+        };
 
-        # packages.default = bevyGame;
+        packages.default = bevyGame;
 
-        # apps.default = flake-utils.lib.mkApp {
-        #   drv = bevyGame;
-        # };
+        apps.default = flake-utils.lib.mkApp {
+          drv = bevyGame;
+        };
 
         devShell = craneLib.devShell {
           inputsFrom = [ bevyGame ];
