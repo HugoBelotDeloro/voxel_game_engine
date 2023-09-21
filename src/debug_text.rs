@@ -80,21 +80,21 @@ fn update_text(
                 .get(FrameTimeDiagnosticsPlugin::FPS)
                 .map(|fps| fps.smoothed())
                 .flatten()
-                .map(|fps| format!("{fps}"))
+                .map(|fps| format!("{fps:.0}"))
                 .unwrap_or(String::from("??"));
 
             let cpu = diagnostics
                 .get(SystemInformationDiagnosticsPlugin::CPU_USAGE)
-                .map(|ec| ec.smoothed())
+                .map(|cpu| cpu.smoothed())
                 .flatten()
-                .map(|ec| format!("{ec}"))
+                .map(|cpu| format!("{cpu:.2}"))
                 .unwrap_or(String::from("??"));
 
             let mem = diagnostics
                 .get(SystemInformationDiagnosticsPlugin::MEM_USAGE)
-                .map(|ec| ec.smoothed())
+                .map(|mem| mem.smoothed())
                 .flatten()
-                .map(|ec| format!("{ec}"))
+                .map(|mem| format!("{mem:.2}"))
                 .unwrap_or(String::from("??"));
 
             let ec = diagnostics
