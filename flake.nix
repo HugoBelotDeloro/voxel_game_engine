@@ -66,6 +66,8 @@
         devShell = craneLib.devShell {
           inputsFrom = [ bevyGame ];
 
+          packages = [ pkgs.just ];
+
           LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${
               with pkgs;
               lib.makeLibraryPath [
