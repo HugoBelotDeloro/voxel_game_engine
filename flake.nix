@@ -48,7 +48,7 @@
 
         cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 
-        bevyGame =
+        bevyGameBin =
           craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
 
         bevyGameClippy = craneLib.cargoClippy (commonArgs // {
@@ -59,9 +59,23 @@
         bevyGameFmt =
           craneLib.cargoFmt (commonArgs // { inherit cargoArtifacts; });
 
+        # TODO: have a bin derivation and an asset derivation, then a separate third to merge them
+        bevyGame = pkgs.stdenv.mkDerivation {
+          name = "my_bevy_game";
+          nativeBuildInputs = [ bevyGameBin ];
+
+          src = ./assets;
+
+          buildPhase = ''
+            mkdir -p $out/bin/assets
+            cp ${bevyGameBin}/bin/my_bevy_game $out/bin/
+            cp -r $src/* $out/bin/assets
+          '';
+        };
+
       in {
         checks = {
-          inherit bevyGame bevyGameClippy bevyGameFmt;
+          inherit bevyGameBin bevyGameClippy bevyGameFmt;
         };
 
         packages.default = bevyGame;
@@ -71,7 +85,7 @@
         };
 
         devShell = craneLib.devShell {
-          inputsFrom = [ bevyGame ];
+          inputsFrom = [ bevyGameBin ];
 
           packages = [ pkgs.just ];
 
