@@ -1,11 +1,12 @@
-use crate::material::{LineList, LineMaterial};
+use crate::material::{CustomMaterial, LineList, LineMaterial};
 use bevy::prelude::*;
 
 pub struct TestScenePlugin;
 
 impl Plugin for TestScenePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup);
+        app.add_systems(Startup, setup)
+            .add_plugins(MaterialPlugin::<CustomMaterial>::default());
     }
 }
 
@@ -47,7 +48,7 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut line_materials: ResMut<Assets<LineMaterial>>,
-    mut standard_materials: ResMut<Assets<StandardMaterial>>,
+    mut custom_materials: ResMut<Assets<CustomMaterial>>,
     asset_server: ResMut<AssetServer>,
 ) {
     spawn_cube(
@@ -111,12 +112,11 @@ fn setup(
     ]);
     let cube_mesh_handle = meshes.add(cube_mesh);
     let cube_texture_handle: Handle<Image> = asset_server.load("textures/stone.png");
-    let cube_material_handle = standard_materials.add(StandardMaterial {
-        base_color_texture: Some(cube_texture_handle),
-        ..default()
+    let cube_material_handle = custom_materials.add(CustomMaterial {
+        color_texture: Some(cube_texture_handle),
     });
 
-    commands.spawn(PbrBundle {
+    commands.spawn(MaterialMeshBundle {
         mesh: cube_mesh_handle,
         material: cube_material_handle,
         ..default()

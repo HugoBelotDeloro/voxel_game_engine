@@ -35,6 +35,21 @@ impl Material for LineMaterial {
     }
 }
 
+impl Material for CustomMaterial {
+    fn fragment_shader() -> ShaderRef {
+        "shaders/custom_material.wgsl".into()
+    }
+}
+
+// This is the struct that will be passed to your shader
+#[derive(TypePath, AsBindGroup, Debug, Clone, TypeUuid)]
+#[uuid = "7d48eaba-6e47-41eb-a738-06288771bb68"]
+pub struct CustomMaterial {
+    #[texture(0)]
+    #[sampler(1)]
+    pub color_texture: Option<Handle<Image>>,
+}
+
 /// A list of lines with a start and end position
 #[derive(Debug, Clone)]
 pub struct LineList {
