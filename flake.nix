@@ -20,8 +20,9 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
 
-        craneLib = crane.lib.${system}.overrideToolchain
-          fenix.packages.${system}.default.toolchain;
+        fenixPkgs = fenix.packages.${system};
+
+        craneLib = crane.lib.${system}.overrideToolchain fenixPkgs.default.toolchain;
 
         src = craneLib.path ./.;
         cleanedSrc = craneLib.cleanCargoSource src;
@@ -87,7 +88,7 @@
         devShell = craneLib.devShell {
           inputsFrom = [ bevyGameBin ];
 
-          packages = [ pkgs.just ];
+          packages = [ pkgs.just fenixPkgs.rust-analyzer ];
 
           LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${
               with pkgs;
