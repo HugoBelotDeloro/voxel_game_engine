@@ -78,29 +78,25 @@ fn update_text(
         for transform in player_controller.iter() {
             let fps = diagnostics
                 .get(FrameTimeDiagnosticsPlugin::FPS)
-                .map(|fps| fps.smoothed())
-                .flatten()
+                .and_then(|fps| fps.smoothed())
                 .map(|fps| format!("{fps:.0}"))
                 .unwrap_or(String::from("??"));
 
             let cpu = diagnostics
                 .get(SystemInformationDiagnosticsPlugin::CPU_USAGE)
-                .map(|cpu| cpu.smoothed())
-                .flatten()
+                .and_then(|cpu| cpu.smoothed())
                 .map(|cpu| format!("{cpu:.2}"))
                 .unwrap_or(String::from("??"));
 
             let mem = diagnostics
                 .get(SystemInformationDiagnosticsPlugin::MEM_USAGE)
-                .map(|mem| mem.smoothed())
-                .flatten()
+                .and_then(|mem| mem.smoothed())
                 .map(|mem| format!("{mem:.2}"))
                 .unwrap_or(String::from("??"));
 
             let ec = diagnostics
                 .get(EntityCountDiagnosticsPlugin::ENTITY_COUNT)
-                .map(|ec| ec.smoothed())
-                .flatten()
+                .and_then(|ec| ec.smoothed())
                 .map(|ec| format!("{ec}"))
                 .unwrap_or(String::from("??"));
 
@@ -108,10 +104,10 @@ fn update_text(
             let Vec3 { x, y, z } = t.translation;
             let (yaw, pitch, roll) = t.rotation.to_euler(EulerRot::XYZ);
 
-            text.sections[1].value = format!("{fps}");
-            text.sections[3].value = format!("{cpu}");
-            text.sections[5].value = format!("{mem}");
-            text.sections[7].value = format!("{ec}");
+            text.sections[1].value = fps.to_string();
+            text.sections[3].value = cpu.to_string();
+            text.sections[5].value = mem.to_string();
+            text.sections[7].value = ec.to_string();
             text.sections[9].value = format!("{x:.2}");
             text.sections[11].value = format!("{y:.2}");
             text.sections[13].value = format!("{z:.2}");
