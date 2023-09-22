@@ -39,7 +39,11 @@
             xorg.libXi
           ];
 
-          nativeBuildInputs = with pkgs; [ pkg-config llvmPackages.bintools ];
+          nativeBuildInputs = with pkgs; [
+            pkg-config
+            clang
+            mold
+          ];
         };
 
         cargoArtifacts = craneLib.buildDepsOnly commonArgs;
@@ -75,7 +79,8 @@
               with pkgs;
               lib.makeLibraryPath [
                 vulkan-loader
-                # udev and alsaLib might be needed someday
+                udev
+                alsaLib
               ]
             }";
         };
