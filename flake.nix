@@ -21,7 +21,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         craneLib = crane.lib.${system}.overrideToolchain
-          fenix.packages.${system}.stable.toolchain;
+          fenix.packages.${system}.default.toolchain;
 
         src = craneLib.path ./.;
         cleanedSrc = craneLib.cleanCargoSource src;
