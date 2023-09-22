@@ -7,13 +7,10 @@ mod player_controller;
 mod settings;
 mod test_scene;
 
-use material::LineMaterial;
-
 fn main() {
     App::new()
         .add_plugins((
             DefaultPlugins.set(ImagePlugin::default_nearest()),
-            MaterialPlugin::<LineMaterial>::default(),
             test_scene::TestScenePlugin,
             player::PlayerPlugin,
             settings::SettingsPlugin,
