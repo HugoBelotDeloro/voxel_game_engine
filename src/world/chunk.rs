@@ -149,14 +149,14 @@ impl Chunk {
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
-    mut custom_materials: ResMut<Assets<VoxelMaterial>>,
+    mut voxel_materials: ResMut<Assets<VoxelMaterial>>,
     asset_server: ResMut<AssetServer>,
 ) {
     let chunk = Chunk::half_empty();
     let cube_mesh = chunk.build_mesh();
     let cube_mesh_handle = meshes.add(cube_mesh);
     let cube_texture_handle: Handle<Image> = asset_server.load("textures/stone.png");
-    let cube_material_handle = custom_materials.add(VoxelMaterial {
+    let cube_material_handle = voxel_materials.add(VoxelMaterial {
         color_texture: Some(cube_texture_handle),
     });
 

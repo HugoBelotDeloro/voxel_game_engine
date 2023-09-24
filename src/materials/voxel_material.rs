@@ -6,7 +6,7 @@ use bevy::{
 
 impl Material for VoxelMaterial {
     fn fragment_shader() -> ShaderRef {
-        "shaders/custom_material.wgsl".into()
+        "shaders/voxel_material.wgsl".into()
     }
 }
 
