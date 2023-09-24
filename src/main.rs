@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 mod chunk;
 mod debug_text;
-mod material;
+mod materials;
 mod player;
 mod player_controller;
 mod settings;
