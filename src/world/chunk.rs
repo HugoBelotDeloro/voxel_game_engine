@@ -10,6 +10,7 @@ impl Plugin for TestScenePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup)
             .add_plugins(MaterialPlugin::<VoxelMaterial>::default());
+            .add_plugins(MaterialPlugin::<LineMaterial>::default());
     }
 }
 

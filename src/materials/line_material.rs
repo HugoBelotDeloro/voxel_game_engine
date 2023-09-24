@@ -31,5 +31,5 @@ impl Material for LineMaterial {
 #[uuid = "2a862800-1c7c-4a44-aa2d-a21a11b4e6f4"]
 pub struct LineMaterial {
     #[uniform(0)]
-    color: Color,
+    pub color: Color,
 }

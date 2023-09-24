@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-mod chunk;
+mod world;
 mod debug_text;
 mod materials;
 mod player;
@@ -11,7 +11,7 @@ fn main() {
     App::new()
         .add_plugins((
             DefaultPlugins.set(ImagePlugin::default_nearest()),
-            chunk::TestScenePlugin,
+            world::chunk::TestScenePlugin,
             player::PlayerPlugin,
             settings::SettingsPlugin,
             debug_text::DebugTextPlugin,
