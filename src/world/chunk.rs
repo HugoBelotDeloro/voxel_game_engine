@@ -1,4 +1,4 @@
-use crate::materials::voxel_material::VoxelMaterial;
+use crate::materials::{voxel_material::VoxelMaterial, line_material::LineMaterial};
 use bevy::{
     prelude::*,
     render::mesh::{Indices, PrimitiveTopology},
@@ -9,7 +9,7 @@ pub struct TestScenePlugin;
 impl Plugin for TestScenePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup)
-            .add_plugins(MaterialPlugin::<VoxelMaterial>::default());
+            .add_plugins(MaterialPlugin::<VoxelMaterial>::default())
             .add_plugins(MaterialPlugin::<LineMaterial>::default());
     }
 }
@@ -150,6 +150,7 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut voxel_materials: ResMut<Assets<VoxelMaterial>>,
+    mut line_materials: ResMut<Assets<LineMaterial>>,
     asset_server: ResMut<AssetServer>,
 ) {
     let chunk = Chunk::half_empty();
@@ -166,6 +167,14 @@ fn setup(
         mesh: cube_mesh_handle,
         ..default()
     });
+
+    let line_material = line_materials.add(LineMaterial { color: Color::BLACK });
+    const OFFSET: f32 = CHUNK_SIZE as f32 / 2.;
+    commands.spawn(MaterialMeshBundle {
+        material: line_material,
+        transform: Transform::from_xyz(OFFSET, OFFSET, OFFSET),
+        mesh: meshes.add(Mesh::from(shape::Cube::new(CHUNK_SIZE as f32))),
+        ..default()});
 
     commands.insert_resource(AmbientLight {
         brightness: 1.,
