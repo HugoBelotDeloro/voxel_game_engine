@@ -1,6 +1,6 @@
 use bevy::{input::mouse::MouseMotion, prelude::*};
 
-use crate::world::ToggleChunkBoundaryOverlayEvent;
+use crate::{world::ToggleChunkBoundaryOverlayEvent, settings::Settings};
 
 pub(super) struct PlayerInputsPlugin;
 
@@ -20,6 +20,7 @@ pub(crate) struct PlayerInputs {
 
 fn process_player_inputs(
     keys: Res<Input<ScanCode>>,
+    settings: Res<Settings>,
     mut mouse_motion: EventReader<MouseMotion>,
     mut player_inputs: ResMut<PlayerInputs>,
     mut ev_toggle_chunk_boundary_overlay: EventWriter<ToggleChunkBoundaryOverlayEvent>,
@@ -32,28 +33,30 @@ fn process_player_inputs(
 
     mouse_motion.clear();
 
+    let key_bindings = &settings.keys;
+
     // Keyboard horizontal
     let mut horizontal_movement = Vec2::ZERO;
-    if keys.pressed(ScanCode(17)) {
+    if keys.pressed(ScanCode(key_bindings.forward)) {
         horizontal_movement += Vec2::new(0., -1.);
     }
-    if keys.pressed(ScanCode(30)) {
+    if keys.pressed(ScanCode(key_bindings.left)) {
         horizontal_movement += Vec2::new(-1., 0.);
     }
-    if keys.pressed(ScanCode(31)) {
+    if keys.pressed(ScanCode(key_bindings.back)) {
         horizontal_movement += Vec2::new(0., 1.);
     }
-    if keys.pressed(ScanCode(32)) {
+    if keys.pressed(ScanCode(key_bindings.right)) {
         horizontal_movement += Vec2::new(1., 0.);
     }
     horizontal_movement = horizontal_movement.normalize_or_zero();
 
     // Keyboard vertical
     let mut vertical_movement = 0.;
-    if keys.pressed(ScanCode(57)) {
+    if keys.pressed(ScanCode(key_bindings.up)) {
         vertical_movement += 1.;
     }
-    if keys.pressed(ScanCode(42)) {
+    if keys.pressed(ScanCode(key_bindings.down)) {
         vertical_movement -= 1.;
     }
 
