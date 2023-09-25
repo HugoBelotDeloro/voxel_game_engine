@@ -23,7 +23,7 @@ impl Plugin for DiagnosticsHudPlugin {
 }
 
 #[derive(Component)]
-pub struct DiagnosticsHud;
+struct DiagnosticsHud;
 
 fn setup(mut commands: Commands) {
     let sections_text = [
