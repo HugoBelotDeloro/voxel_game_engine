@@ -6,8 +6,6 @@ use bevy::{
     prelude::*,
 };
 
-use crate::player_inputs::PlayerInputs;
-
 pub(super) struct DiagnosticsHudPlugin;
 
 impl Plugin for DiagnosticsHudPlugin {
@@ -71,11 +69,11 @@ fn setup(mut commands: Commands) {
 
 fn update_text(
     mut text: Query<&mut Text, With<DiagnosticsHud>>,
-    player_controller: Query<&GlobalTransform, With<PlayerInputs>>,
+    player_camera: Query<&GlobalTransform, With<crate::player::PlayerCamera>>,
     diagnostics: Res<DiagnosticsStore>,
 ) {
     for mut text in text.iter_mut() {
-        for transform in player_controller.iter() {
+        for transform in player_camera.iter() {
             let fps = diagnostics
                 .get(FrameTimeDiagnosticsPlugin::FPS)
                 .and_then(|fps| fps.smoothed())

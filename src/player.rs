@@ -11,7 +11,10 @@ impl Plugin for PlayerPlugin {
 }
 
 #[derive(Component)]
-struct Player;
+pub(crate) struct Player;
+
+#[derive(Component)]
+pub(crate) struct PlayerCamera;
 
 fn setup(mut commands: Commands) {
     let camera = commands
@@ -21,7 +24,7 @@ fn setup(mut commands: Commands) {
                     .looking_at(Vec3::new(0., 0., -1.), Vec3::Y),
                 ..default()
             },
-            PlayerInputs::default(),
+            PlayerCamera,
         ))
         .id();
 
@@ -40,34 +43,31 @@ fn setup(mut commands: Commands) {
 
 fn move_body(
     mut body_query: Query<&mut Transform, With<Player>>,
-    controller_query: Query<&PlayerInputs>,
+    player_inputs: Res<PlayerInputs>,
     timer: Res<Time>,
     settings: Res<Settings>,
 ) {
-    for player_controller in controller_query.iter() {
-        for mut transform in body_query.iter_mut() {
-            let direction = (transform.back() * player_controller.horizontal_movement.y
-                + transform.right() * player_controller.horizontal_movement.x)
-                * settings.horizontal_speed
-                + transform.up() * player_controller.vertical_movement * settings.vertical_speed;
-            transform.translation += direction * timer.delta_seconds();
+    for mut transform in body_query.iter_mut() {
+        let direction = (transform.back() * player_inputs.horizontal_movement.y
+            + transform.right() * player_inputs.horizontal_movement.x)
+            * settings.horizontal_speed
+            + transform.up() * player_inputs.vertical_movement * settings.vertical_speed;
+        transform.translation += direction * timer.delta_seconds();
 
-            let mouse_delta =
-                player_controller.mouse_delta * timer.delta_seconds() * settings.sensitivity;
+        let mouse_delta = player_inputs.mouse_delta * timer.delta_seconds() * settings.sensitivity;
 
-            transform.rotate_y(mouse_delta.x);
-        }
+        transform.rotate_y(mouse_delta.x);
     }
 }
 
 fn move_head(
-    mut head_query: Query<(&mut Transform, &PlayerInputs)>,
+    mut head_query: Query<&mut Transform, With<PlayerCamera>>,
     timer: Res<Time>,
     settings: Res<Settings>,
+    player_inputs: Res<PlayerInputs>,
 ) {
-    for (mut transform, player_controller) in head_query.iter_mut() {
-        transform.rotate_x(
-            player_controller.mouse_delta.y * timer.delta_seconds() * settings.sensitivity,
-        );
+    for mut transform in head_query.iter_mut() {
+        transform
+            .rotate_x(player_inputs.mouse_delta.y * timer.delta_seconds() * settings.sensitivity);
     }
 }

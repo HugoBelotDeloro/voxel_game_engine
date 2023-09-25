@@ -6,11 +6,12 @@ pub(super) struct PlayerInputsPlugin;
 
 impl Plugin for PlayerInputsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, process_player_inputs);
+        app.add_systems(Update, process_player_inputs)
+            .init_resource::<PlayerInputs>();
     }
 }
 
-#[derive(Component, Default)]
+#[derive(Resource, Default)]
 pub(crate) struct PlayerInputs {
     pub(crate) mouse_delta: Vec2,
     pub(crate) horizontal_movement: Vec2,
@@ -20,7 +21,7 @@ pub(crate) struct PlayerInputs {
 fn process_player_inputs(
     keys: Res<Input<ScanCode>>,
     mut mouse_motion: EventReader<MouseMotion>,
-    mut query: Query<&mut PlayerInputs>,
+    mut player_inputs: ResMut<PlayerInputs>,
     mut ev_toggle_chunk_boundary_overlay: EventWriter<ToggleChunkBoundaryOverlayEvent>,
 ) {
     // Mouse
@@ -57,11 +58,9 @@ fn process_player_inputs(
     }
 
     // Apply
-    for mut player_controller in query.iter_mut() {
-        player_controller.mouse_delta = mouse_delta;
-        player_controller.horizontal_movement = horizontal_movement;
-        player_controller.vertical_movement = vertical_movement;
-    }
+    player_inputs.mouse_delta = mouse_delta;
+    player_inputs.horizontal_movement = horizontal_movement;
+    player_inputs.vertical_movement = vertical_movement;
 
     if keys.just_pressed(ScanCode(18)) {
         ev_toggle_chunk_boundary_overlay.send(ToggleChunkBoundaryOverlayEvent);
