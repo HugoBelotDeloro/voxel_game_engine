@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-mod debug_text;
+mod debug;
 mod materials;
 mod player;
 mod player_controller;
@@ -14,7 +14,7 @@ fn main() {
             world::WorldPlugin,
             player::PlayerPlugin,
             settings::SettingsPlugin,
-            debug_text::DebugTextPlugin,
+            debug::DebugToolsPlugin,
         ))
         .run();
 }

@@ -8,9 +8,9 @@ use bevy::{
 
 use crate::player_controller::PlayerController;
 
-pub struct DebugTextPlugin;
+pub struct DiagnosticsHudPlugin;
 
-impl Plugin for DebugTextPlugin {
+impl Plugin for DiagnosticsHudPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
             FrameTimeDiagnosticsPlugin,
@@ -23,7 +23,7 @@ impl Plugin for DebugTextPlugin {
 }
 
 #[derive(Component)]
-pub struct DebugText;
+pub struct DiagnosticsHud;
 
 fn setup(mut commands: Commands) {
     let sections_text = [
@@ -65,12 +65,12 @@ fn setup(mut commands: Commands) {
             left: Val::Px(12.),
             ..default()
         }),
-        DebugText,
+        DiagnosticsHud,
     ));
 }
 
 fn update_text(
-    mut text: Query<&mut Text, With<DebugText>>,
+    mut text: Query<&mut Text, With<DiagnosticsHud>>,
     player_controller: Query<&GlobalTransform, With<PlayerController>>,
     diagnostics: Res<DiagnosticsStore>,
 ) {
