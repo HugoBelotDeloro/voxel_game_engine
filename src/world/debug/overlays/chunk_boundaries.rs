@@ -1,8 +1,8 @@
 use bevy::prelude::*;
 
-use crate::{materials::line_material::LineMaterial, world::chunk::CHUNK_SIZE};
+use crate::{materials::LineMaterial, world::chunk::CHUNK_SIZE};
 
-pub struct ChunkBoundaryOverlayPlugin;
+pub(super) struct ChunkBoundaryOverlayPlugin;
 
 impl Plugin for ChunkBoundaryOverlayPlugin {
     fn build(&self, app: &mut App) {
@@ -16,7 +16,7 @@ impl Plugin for ChunkBoundaryOverlayPlugin {
 struct ChunkBoundaryOverlay;
 
 #[derive(Event)]
-pub struct ToggleChunkBoundaryOverlayEvent;
+pub(crate) struct ToggleChunkBoundaryOverlayEvent;
 
 fn setup(
     mut commands: Commands,

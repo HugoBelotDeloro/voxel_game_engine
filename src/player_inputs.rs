@@ -2,17 +2,25 @@ use bevy::{input::mouse::MouseMotion, prelude::*};
 
 use crate::world::ToggleChunkBoundaryOverlayEvent;
 
-#[derive(Component, Default)]
-pub struct PlayerController {
-    pub mouse_delta: Vec2,
-    pub horizontal_movement: Vec2,
-    pub vertical_movement: f32,
+pub(super) struct PlayerInputsPlugin;
+
+impl Plugin for PlayerInputsPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, process_player_inputs);
+    }
 }
 
-pub fn player_controller(
+#[derive(Component, Default)]
+pub(crate) struct PlayerInputs {
+    pub(crate) mouse_delta: Vec2,
+    pub(crate) horizontal_movement: Vec2,
+    pub(crate) vertical_movement: f32,
+}
+
+fn process_player_inputs(
     keys: Res<Input<ScanCode>>,
     mut mouse_motion: EventReader<MouseMotion>,
-    mut query: Query<&mut PlayerController>,
+    mut query: Query<&mut PlayerInputs>,
     mut ev_toggle_chunk_boundary_overlay: EventWriter<ToggleChunkBoundaryOverlayEvent>,
 ) {
     // Mouse

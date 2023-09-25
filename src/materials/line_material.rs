@@ -29,7 +29,7 @@ impl Material for LineMaterial {
 
 #[derive(TypePath, AsBindGroup, Debug, Clone, TypeUuid)]
 #[uuid = "2a862800-1c7c-4a44-aa2d-a21a11b4e6f4"]
-pub struct LineMaterial {
+pub(crate) struct LineMaterial {
     #[uniform(0)]
-    pub color: Color,
+    pub(crate) color: Color,
 }

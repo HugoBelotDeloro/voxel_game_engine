@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-pub struct ScanCodesHudPlugin;
+pub(super) struct ScanCodesHudPlugin;
 
 impl Plugin for ScanCodesHudPlugin {
     fn build(&self, app: &mut App) {

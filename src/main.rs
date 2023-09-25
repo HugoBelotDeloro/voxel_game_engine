@@ -3,7 +3,7 @@ use bevy::prelude::*;
 mod debug;
 mod materials;
 mod player;
-mod player_controller;
+mod player_inputs;
 mod settings;
 mod world;
 
@@ -11,10 +11,12 @@ fn main() {
     App::new()
         .add_plugins((
             DefaultPlugins.set(ImagePlugin::default_nearest()),
-            world::WorldPlugin,
+            debug::DebugToolsPlugin,
+            materials::MaterialsPlugin,
+            player_inputs::PlayerInputsPlugin,
             player::PlayerPlugin,
             settings::SettingsPlugin,
-            debug::DebugToolsPlugin,
+            world::WorldPlugin,
         ))
         .run();
 }

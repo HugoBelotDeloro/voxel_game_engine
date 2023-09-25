@@ -1,20 +1,17 @@
-use crate::{
-    player_controller::{player_controller, PlayerController},
-    settings::Settings,
-};
+use crate::{player_inputs::PlayerInputs, settings::Settings};
 use bevy::prelude::*;
 
-pub struct PlayerPlugin;
+pub(super) struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, (player_controller, move_body, move_head))
+        app.add_systems(Update, (move_body, move_head))
             .add_systems(Startup, setup);
     }
 }
 
 #[derive(Component)]
-pub struct Player;
+struct Player;
 
 fn setup(mut commands: Commands) {
     let camera = commands
@@ -24,7 +21,7 @@ fn setup(mut commands: Commands) {
                     .looking_at(Vec3::new(0., 0., -1.), Vec3::Y),
                 ..default()
             },
-            PlayerController::default(),
+            PlayerInputs::default(),
         ))
         .id();
 
@@ -43,7 +40,7 @@ fn setup(mut commands: Commands) {
 
 fn move_body(
     mut body_query: Query<&mut Transform, With<Player>>,
-    controller_query: Query<&PlayerController>,
+    controller_query: Query<&PlayerInputs>,
     timer: Res<Time>,
     settings: Res<Settings>,
 ) {
@@ -64,7 +61,7 @@ fn move_body(
 }
 
 fn move_head(
-    mut head_query: Query<(&mut Transform, &PlayerController)>,
+    mut head_query: Query<(&mut Transform, &PlayerInputs)>,
     timer: Res<Time>,
     settings: Res<Settings>,
 ) {

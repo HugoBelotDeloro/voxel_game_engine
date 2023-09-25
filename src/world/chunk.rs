@@ -3,15 +3,15 @@ use bevy::{
     render::mesh::{Indices, PrimitiveTopology},
 };
 
-pub const CHUNK_SIZE: usize = 8;
+pub(super) const CHUNK_SIZE: usize = 8;
 
 #[derive(Component)]
-pub struct Chunk {
+pub(super) struct Chunk {
     blocks: Vec<bool>,
 }
 
 impl Chunk {
-    pub fn half_empty() -> Self {
+    pub(super) fn half_empty() -> Self {
         let mut blocks = vec![false; CHUNK_SIZE.pow(3)];
 
         for i in 0..CHUNK_SIZE {
@@ -26,15 +26,15 @@ impl Chunk {
         Chunk { blocks }
     }
 
-    pub fn get_block(&self, [x, y, z]: &[usize; 3]) -> bool {
+    pub(super) fn get_block(&self, [x, y, z]: &[usize; 3]) -> bool {
         self.blocks[(x * CHUNK_SIZE + y) * CHUNK_SIZE + z]
     }
 
-    pub fn set_block(&mut self, [x, y, z]: &[usize; 3], value: bool) {
+    pub(super) fn set_block(&mut self, [x, y, z]: &[usize; 3], value: bool) {
         self.blocks[(x * CHUNK_SIZE + y) * CHUNK_SIZE + z] = value;
     }
 
-    pub fn build_mesh(&self) -> Mesh {
+    pub(super) fn build_mesh(&self) -> Mesh {
         let mut positions = Vec::new();
         let mut normals = Vec::new();
         let mut uvs = Vec::new();

@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-pub struct SettingsPlugin;
+pub(super) struct SettingsPlugin;
 
 impl Plugin for SettingsPlugin {
     fn build(&self, app: &mut App) {
@@ -9,11 +9,11 @@ impl Plugin for SettingsPlugin {
 }
 
 #[derive(Resource)]
-pub struct Settings {
-    pub keys: Keys,
-    pub sensitivity: f32,
-    pub horizontal_speed: f32,
-    pub vertical_speed: f32,
+pub(crate) struct Settings {
+    pub(crate) keys: Keys,
+    pub(crate) sensitivity: f32,
+    pub(crate) horizontal_speed: f32,
+    pub(crate) vertical_speed: f32,
 }
 
 impl Default for Settings {
@@ -27,13 +27,13 @@ impl Default for Settings {
     }
 }
 
-pub struct Keys {
-    pub forward: u32,
-    pub back: u32,
-    pub left: u32,
-    pub right: u32,
-    pub up: u32,
-    pub down: u32,
+pub(crate) struct Keys {
+    pub(crate) forward: u32,
+    pub(crate) back: u32,
+    pub(crate) left: u32,
+    pub(crate) right: u32,
+    pub(crate) up: u32,
+    pub(crate) down: u32,
 }
 
 impl Default for Keys {

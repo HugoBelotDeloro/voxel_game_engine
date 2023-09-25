@@ -3,7 +3,7 @@ mod scan_codes_hud;
 
 use bevy::prelude::*;
 
-pub struct DebugToolsPlugin;
+pub(super) struct DebugToolsPlugin;
 
 impl Plugin for DebugToolsPlugin {
     fn build(&self, app: &mut App) {

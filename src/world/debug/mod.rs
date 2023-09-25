@@ -1,15 +1,14 @@
-use bevy::app::PluginGroupBuilder;
 use bevy::prelude::*;
 
-use overlays::ChunkBoundaryOverlayPlugin;
-pub use overlays::ToggleChunkBoundaryOverlayEvent;
+use overlays::OverlaysPlugin;
+pub(crate) use overlays::ToggleChunkBoundaryOverlayEvent;
 
 mod overlays;
 
-pub struct DebugPluginGroup;
+pub(super) struct DebugPlugin;
 
-impl PluginGroup for DebugPluginGroup {
-    fn build(self) -> PluginGroupBuilder {
-        PluginGroupBuilder::start::<DebugPluginGroup>().add(ChunkBoundaryOverlayPlugin)
+impl Plugin for DebugPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_plugins(OverlaysPlugin);
     }
 }

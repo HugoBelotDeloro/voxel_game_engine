@@ -6,9 +6,9 @@ use bevy::{
     prelude::*,
 };
 
-use crate::player_controller::PlayerController;
+use crate::player_inputs::PlayerInputs;
 
-pub struct DiagnosticsHudPlugin;
+pub(super) struct DiagnosticsHudPlugin;
 
 impl Plugin for DiagnosticsHudPlugin {
     fn build(&self, app: &mut App) {
@@ -71,7 +71,7 @@ fn setup(mut commands: Commands) {
 
 fn update_text(
     mut text: Query<&mut Text, With<DiagnosticsHud>>,
-    player_controller: Query<&GlobalTransform, With<PlayerController>>,
+    player_controller: Query<&GlobalTransform, With<PlayerInputs>>,
     diagnostics: Res<DiagnosticsStore>,
 ) {
     for mut text in text.iter_mut() {

@@ -1,22 +1,17 @@
 use bevy::prelude::*;
 
-use crate::{
-    materials::{line_material::LineMaterial, voxel_material::VoxelMaterial},
-    world::chunk::Chunk,
-};
-pub mod chunk;
+use crate::{materials::VoxelMaterial, world::chunk::Chunk};
+pub(super) mod chunk;
 mod debug;
 
-pub use debug::ToggleChunkBoundaryOverlayEvent;
+pub(crate) use debug::ToggleChunkBoundaryOverlayEvent;
 
-pub struct WorldPlugin;
+pub(super) struct WorldPlugin;
 
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup)
-            .add_plugins(MaterialPlugin::<VoxelMaterial>::default())
-            .add_plugins(MaterialPlugin::<LineMaterial>::default())
-            .add_plugins(debug::DebugPluginGroup);
+            .add_plugins(debug::DebugPlugin);
     }
 }
 
@@ -31,7 +26,7 @@ fn setup(
     let cube_mesh_handle = meshes.add(cube_mesh);
     let cube_texture_handle: Handle<Image> = asset_server.load("textures/stone.png");
     let cube_material_handle = voxel_materials.add(VoxelMaterial {
-        color_texture: Some(cube_texture_handle),
+        texture: Some(cube_texture_handle),
     });
 
     commands.spawn(MaterialMeshBundle {
