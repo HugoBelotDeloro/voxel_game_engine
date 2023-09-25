@@ -1,5 +1,7 @@
 use bevy::{input::mouse::MouseMotion, prelude::*};
 
+use crate::world::ToggleChunkBoundaryOverlayEvent;
+
 #[derive(Component, Default)]
 pub struct PlayerController {
     pub mouse_delta: Vec2,
@@ -11,6 +13,7 @@ pub fn player_controller(
     keys: Res<Input<ScanCode>>,
     mut mouse_motion: EventReader<MouseMotion>,
     mut query: Query<&mut PlayerController>,
+    mut ev_toggle_chunk_boundary_overlay: EventWriter<ToggleChunkBoundaryOverlayEvent>,
 ) {
     // Mouse
     let mut mouse_delta = Vec2::ZERO;
@@ -50,5 +53,9 @@ pub fn player_controller(
         player_controller.mouse_delta = mouse_delta;
         player_controller.horizontal_movement = horizontal_movement;
         player_controller.vertical_movement = vertical_movement;
+    }
+
+    if keys.just_pressed(ScanCode(18)) {
+        ev_toggle_chunk_boundary_overlay.send(ToggleChunkBoundaryOverlayEvent);
     }
 }

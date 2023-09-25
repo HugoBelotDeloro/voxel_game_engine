@@ -2,9 +2,12 @@ use bevy::prelude::*;
 
 use crate::{
     materials::{line_material::LineMaterial, voxel_material::VoxelMaterial},
-    world::chunk::{Chunk, CHUNK_SIZE},
+    world::chunk::Chunk,
 };
 pub mod chunk;
+mod debug;
+
+pub use debug::ToggleChunkBoundaryOverlayEvent;
 
 pub struct WorldPlugin;
 
@@ -12,7 +15,8 @@ impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, setup)
             .add_plugins(MaterialPlugin::<VoxelMaterial>::default())
-            .add_plugins(MaterialPlugin::<LineMaterial>::default());
+            .add_plugins(MaterialPlugin::<LineMaterial>::default())
+            .add_plugins(debug::DebugPluginGroup);
     }
 }
 
@@ -20,7 +24,6 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut voxel_materials: ResMut<Assets<VoxelMaterial>>,
-    mut line_materials: ResMut<Assets<LineMaterial>>,
     asset_server: ResMut<AssetServer>,
 ) {
     let chunk = Chunk::half_empty();
@@ -35,17 +38,6 @@ fn setup(
         material: cube_material_handle,
         transform: Transform::from_xyz(0., 0., 0.),
         mesh: cube_mesh_handle,
-        ..default()
-    });
-
-    let line_material = line_materials.add(LineMaterial {
-        color: Color::BLACK,
-    });
-    const OFFSET: f32 = CHUNK_SIZE as f32 / 2.;
-    commands.spawn(MaterialMeshBundle {
-        material: line_material,
-        transform: Transform::from_xyz(OFFSET, OFFSET, OFFSET),
-        mesh: meshes.add(Mesh::from(shape::Cube::new(CHUNK_SIZE as f32))),
         ..default()
     });
 
