@@ -34,6 +34,7 @@ pub(crate) struct Keys {
     pub(crate) right: u32,
     pub(crate) up: u32,
     pub(crate) down: u32,
+    pub(crate) toggle_chunk_boundary_overlay: u32,
 }
 
 impl Default for Keys {
@@ -45,6 +46,7 @@ impl Default for Keys {
             right: 32,
             up: 57,
             down: 42,
+            toggle_chunk_boundary_overlay: 61,
         }
     }
 }

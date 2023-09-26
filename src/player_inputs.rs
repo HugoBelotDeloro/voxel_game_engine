@@ -65,7 +65,7 @@ fn process_player_inputs(
     player_inputs.horizontal_movement = horizontal_movement;
     player_inputs.vertical_movement = vertical_movement;
 
-    if keys.just_pressed(ScanCode(18)) {
+    if keys.just_pressed(ScanCode(key_bindings.toggle_chunk_boundary_overlay)) {
         ev_toggle_chunk_boundary_overlay.send(ToggleChunkBoundaryOverlayEvent);
     }
 }
