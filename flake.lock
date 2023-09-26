@@ -10,11 +10,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1695081215,
-        "narHash": "sha256-r2r4/aQwqXPnKyduPR6hkByeiJi00DFp6CXX1YtEL8k=",
+        "lastModified": 1695511445,
+        "narHash": "sha256-mnE14re43v3/Jc50Jv0BKPMtEk7FEtDSligP6B5HwlI=",
         "owner": "ipetkov",
         "repo": "crane",
-        "rev": "681ad0016630ded86c386a3dbcc13c702650ba08",
+        "rev": "3de322e06fc88ada5e3589dc8a375b73e749f512",
         "type": "github"
       },
       "original": {
@@ -31,11 +31,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1694586081,
-        "narHash": "sha256-DNAohcMcTJNiFJ2hTTS6R+yaqVU+QVzp1uRsz0Ctiac=",
+        "lastModified": 1695709315,
+        "narHash": "sha256-XKzbb4NqYmUVlORwjCT//RGeQiJa+6LuGYllpaLP5lQ=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "b16b1f21654b9490c662f6fd0a8fe3774a4b1606",
+        "rev": "f5845b16d889d8bf9930fe1098820074da4cbce9",
         "type": "github"
       },
       "original": {
@@ -80,10 +80,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1694048570,
-        "narHash": "sha256-PEQptwFCVaJ+jLFJgrZll2shQ9VI/7xVhrCYkJo8iIw=",
-        "path": "/nix/store/splp4lqr6n115q125nhqk2qmg81hsk1r-source",
-        "rev": "4f77ea639305f1de0a14d9d41eef83313360638c",
+        "lastModified": 1695559356,
+        "narHash": "sha256-kXZ1pUoImD9OEbPCwpTz4tHsNTr4CIyIfXb3ocuR8sI=",
+        "path": "/nix/store/dn5wzc9a8hrpml66i6kz5f3q6dr3jjmk-source",
+        "rev": "261abe8a44a7e8392598d038d2e01f7b33cf26d0",
         "type": "path"
       },
       "original": {
@@ -101,11 +101,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1694553088,
-        "narHash": "sha256-vnPa/OueHI+Dx7NKB34f5SI7Mmz/VSrP+IAoGNKueU0=",
+        "lastModified": 1695642814,
+        "narHash": "sha256-xR1+YaPcutqXN7BYYCyHPU8VVh/gjW+bVFTfA+vHpv0=",
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "15e13561499dbe90ef07cf37a90c1cedafc53e28",
+        "rev": "d3cc3bc00e310ff49268ce0c593eaa6bf4724bbd",
         "type": "github"
       },
       "original": {

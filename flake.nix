@@ -7,9 +7,7 @@
   };
   inputs.crane = {
     url = "github:ipetkov/crane";
-    inputs = {
-      nixpkgs.follows = "nixpkgs";
-    };
+    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, fenix, crane }:
@@ -20,7 +18,8 @@
 
       fenixPkgs = fenix.packages.${system};
 
-      craneLib = crane.lib.${system}.overrideToolchain fenixPkgs.default.toolchain;
+      craneLib =
+        crane.lib.${system}.overrideToolchain fenixPkgs.default.toolchain;
 
       src = craneLib.path ./.;
       cleanedSrc = craneLib.cleanCargoSource src;
@@ -38,11 +37,7 @@
           xorg.libXi
         ];
 
-        nativeBuildInputs = with pkgs; [
-          pkg-config
-          clang
-          mold
-        ];
+        nativeBuildInputs = with pkgs; [ pkg-config clang mold ];
       };
 
       cargoArtifacts = craneLib.buildDepsOnly commonArgs;
@@ -73,9 +68,7 @@
       };
 
     in {
-      checks.${system} = {
-        inherit bevyGameBin bevyGameClippy bevyGameFmt;
-      };
+      checks.${system} = { inherit bevyGameBin bevyGameClippy bevyGameFmt; };
 
       packages.${system}.default = bevyGame;
 
@@ -91,12 +84,10 @@
 
         LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${
             with pkgs;
-            lib.makeLibraryPath [
-              vulkan-loader
-              udev
-              alsaLib
-            ]
+            lib.makeLibraryPath [ vulkan-loader udev alsaLib ]
           }";
       };
+
+      formatter.${system} = pkgs.nixfmt;
     };
 }
