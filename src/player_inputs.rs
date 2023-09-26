@@ -1,6 +1,6 @@
 use bevy::{input::mouse::MouseMotion, prelude::*};
 
-use crate::{world::ToggleChunkBoundaryOverlayEvent, settings::Settings};
+use crate::{settings::Settings, world::ToggleChunkBoundaryOverlayEvent};
 
 pub(super) struct PlayerInputsPlugin;
 
