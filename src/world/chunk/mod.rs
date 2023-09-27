@@ -2,36 +2,45 @@ use bevy::{
     prelude::*,
     render::mesh::{Indices, PrimitiveTopology},
 };
+use chunk_blocks::ChunkBlocks;
 
-pub(super) const CHUNK_SIZE: usize = 8;
+mod chunk_blocks;
+mod chunk_coords_iterator;
+
+use chunk_coords_iterator::ChunkCoordsIterator;
+
+pub(super) const CHUNK_SIZE: u8 = 8;
+pub(super) const CHUNK_SIZE_USIZE: usize = CHUNK_SIZE as usize;
 
 #[derive(Component)]
 pub(super) struct Chunk {
-    blocks: Vec<bool>,
+    blocks: ChunkBlocks,
 }
+
+type ChunkBlockCoords = [u8; 3];
+pub(super) type BlockType = bool;
 
 impl Chunk {
     pub(super) fn half_empty() -> Self {
-        let mut blocks = vec![false; CHUNK_SIZE.pow(3)];
+        let mut chunk = Self {
+            blocks: ChunkBlocks::empty(),
+        };
 
-        for i in 0..CHUNK_SIZE {
-            for j in 0..CHUNK_SIZE {
-                for k in 0..CHUNK_SIZE {
-                    if (i + j + k) % 2 == 0 {
-                        blocks[(i * CHUNK_SIZE + j) * CHUNK_SIZE + k] = true;
-                    }
-                }
+        for [x, y, z] in Chunk::chunk_coords_iter() {
+            if (x + y + z) % 2 == 0 {
+                chunk.set_block(&[x, y, z], true);
             }
         }
-        Chunk { blocks }
+
+        chunk
     }
 
-    pub(super) fn get_block(&self, [x, y, z]: &[usize; 3]) -> bool {
-        self.blocks[(x * CHUNK_SIZE + y) * CHUNK_SIZE + z]
+    pub(super) fn get_block(&self, coords: &ChunkBlockCoords) -> BlockType {
+        self.blocks.get_block_with(coords)
     }
 
-    pub(super) fn set_block(&mut self, [x, y, z]: &[usize; 3], value: bool) {
-        self.blocks[(x * CHUNK_SIZE + y) * CHUNK_SIZE + z] = value;
+    pub(super) fn set_block(&mut self, coords: &ChunkBlockCoords, block_type: BlockType) {
+        self.blocks.set_block_with(coords, block_type)
     }
 
     pub(super) fn build_mesh(&self) -> Mesh {
@@ -113,15 +122,6 @@ impl Chunk {
                 }
             }
         }
-        // let top_left = [0., 0.];
-        // let top_center = [0.5, 0.];
-        // let top_right = [1., 0.];
-        // let middle_left = [0., 0.5];
-        // let middle_center = [0.5, 0.5];
-        // let middle_right = [1., 0.5];
-        // let bottom_left = [0., 1.];
-        // let bottom_center = [0.5, 1.];
-        // let bottom_right = [1., 1.];
 
         let indices = Indices::U32(indices);
 
@@ -132,5 +132,9 @@ impl Chunk {
         mesh.set_indices(Some(indices));
 
         mesh
+    }
+
+    fn chunk_coords_iter() -> ChunkCoordsIterator {
+        ChunkCoordsIterator::new()
     }
 }

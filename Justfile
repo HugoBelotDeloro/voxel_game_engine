@@ -6,3 +6,6 @@ check:
 
 fmt:
   cargo fmt
+
+test:
+  cargo test --features bevy/dynamic_linking
