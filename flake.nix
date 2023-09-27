@@ -55,14 +55,14 @@
 
       # TODO: have a bin derivation and an asset derivation, then a separate third to merge them
       bevyGame = pkgs.stdenv.mkDerivation {
-        name = "my_bevy_game";
+        name = "voxel_game_engine";
         nativeBuildInputs = [ bevyGameBin ];
 
         src = ./assets;
 
         buildPhase = ''
           mkdir -p $out/bin/assets
-          cp ${bevyGameBin}/bin/my_bevy_game $out/bin/
+          cp ${bevyGameBin}/bin/voxel_game_engine $out/bin/
           cp -r $src/* $out/bin/assets
         '';
       };
@@ -74,7 +74,7 @@
 
       apps.${system}.default = {
         type = "app";
-        program = "${bevyGame}/bin/my_bevy_game";
+        program = "${bevyGame}/bin/voxel_game_engine";
       };
 
       devShells.${system}.default = craneLib.devShell {
