@@ -1,5 +1,6 @@
-use crate::{player_inputs::PlayerInputs, settings::Settings};
 use bevy::prelude::*;
+
+use crate::{player_inputs::PlayerInputs, settings::Settings};
 
 pub(super) struct PlayerPlugin;
 
