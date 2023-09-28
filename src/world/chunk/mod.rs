@@ -135,18 +135,19 @@ impl Chunk {
                 positions.extend(cube_positions);
                 normals.extend(cube_normals);
                 uvs.extend(cube_uvs);
-                const LOCAL_INDICES: [u32; 36] = [
-                    0, 1, 2, 2, 3, 0, // front
-                    4, 5, 6, 6, 7, 4, // back
-                    8, 9, 10, 10, 11, 8, // right
-                    12, 13, 14, 14, 15, 12, // left
-                    16, 17, 18, 18, 19, 16, // top
-                    20, 21, 22, 22, 23, 20, // bottom
+
+                const LOCAL_INDICES: [[u32; 6]; 6] = [
+                    [0, 1, 2, 2, 3, 0],
+                    [4, 5, 6, 6, 7, 4],
+                    [8, 9, 10, 10, 11, 8],
+                    [12, 13, 14, 14, 15, 12],
+                    [16, 17, 18, 18, 19, 16],
+                    [20, 21, 22, 22, 23, 20],
                 ];
                 indices.extend(
                     LOCAL_INDICES
                         .iter()
-                        .map(|i| i + current_index)
+                        .flat_map(|v| v.map(|i| i + current_index))
                         .collect::<Vec<u32>>(),
                 );
                 current_index += 24;
