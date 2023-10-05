@@ -1,4 +1,4 @@
-use super::{BlockType, ChunkBlockCoords, CHUNK_SIZE_USIZE};
+use super::{BlockType, ChunkBlockCoords, CHUNK_SIZE, CHUNK_SIZE_USIZE};
 
 const CHUNK_ARRAY_SIZE: usize = CHUNK_SIZE_USIZE.pow(3);
 
@@ -13,6 +13,9 @@ pub(super) struct ChunkBlockIndex {
 
 pub(super) fn index_of(coords: &ChunkBlockCoords) -> ChunkBlockIndex {
     let [x, y, z] = *coords;
+    assert!(x < CHUNK_SIZE);
+    assert!(y < CHUNK_SIZE);
+    assert!(z < CHUNK_SIZE);
     let (x, y, z) = (x as usize, y as usize, z as usize);
     ChunkBlockIndex {
         n: (x * CHUNK_SIZE_USIZE + y) * CHUNK_SIZE_USIZE + z,
@@ -32,6 +35,12 @@ impl ChunkBlocks {
     pub(super) fn empty() -> Self {
         Self {
             blocks: [false; CHUNK_SIZE_USIZE.pow(3)],
+        }
+    }
+
+    pub(super) fn full() -> Self {
+        Self {
+            blocks: [true; CHUNK_SIZE_USIZE.pow(3)],
         }
     }
 

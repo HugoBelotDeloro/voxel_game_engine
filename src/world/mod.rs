@@ -21,7 +21,8 @@ fn setup(
     mut voxel_materials: ResMut<Assets<VoxelMaterial>>,
     asset_server: ResMut<AssetServer>,
 ) {
-    let chunk = Chunk::half_empty();
+    let mut chunk = Chunk::full();
+    chunk.set_block(&[1, 2, 3], false);
     let cube_mesh = chunk.build_mesh();
     let cube_mesh_handle = meshes.add(cube_mesh);
     let cube_texture_handle: Handle<Image> = asset_server.load("textures/stone.png");

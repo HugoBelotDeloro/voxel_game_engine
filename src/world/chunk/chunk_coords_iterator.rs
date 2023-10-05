@@ -16,13 +16,12 @@ impl Iterator for ChunkCoordsIterator {
     fn next(&mut self) -> Option<Self::Item> {
         let item = self.coords;
         let [mut x, mut y, mut z] = self.coords;
+        if x == CHUNK_SIZE {
+            return None;
+        }
         if z + 1 == CHUNK_SIZE {
             if y + 1 == CHUNK_SIZE {
-                if x + 1 == CHUNK_SIZE {
-                    return None;
-                } else {
-                    x += 1;
-                }
+                x += 1;
                 y = 0;
             } else {
                 y += 1;
@@ -34,5 +33,15 @@ impl Iterator for ChunkCoordsIterator {
 
         self.coords = [x, y, z];
         Some(item)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{super::CHUNK_SIZE_USIZE, *};
+
+    #[test]
+    fn is_correct_size() {
+        assert_eq!(ChunkCoordsIterator::new().count(), CHUNK_SIZE_USIZE.pow(3));
     }
 }
